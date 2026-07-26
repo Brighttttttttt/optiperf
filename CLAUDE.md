@@ -32,10 +32,25 @@ Plan détaillé (vision, modèle de données, écrans) : `../PLAN_MVP.md` (dans 
 ## Commandes
 
 ```
-npm run dev      # serveur de dev (localhost:3000)
-npm run build    # build de prod
-npm run lint     # lint Next.js
+npm run dev       # serveur de dev (localhost:3000)
+npm run build     # build de prod
+npm run lint      # lint Next.js
+npm run test      # tests unitaires (Vitest)
+npm run test:e2e  # tests de bout en bout (Playwright, port 3100 dédié)
 ```
+
+## Workflow GitHub — à respecter à chaque fois
+
+1. **Une issue avant le code.** Toute nouvelle fonctionnalité ou correction part d'une issue GitHub (créer l'issue si elle n'existe pas encore). Pas de code écrit sans issue associée.
+2. **Une branche par issue**, nommée `feat/<numéro>-<sujet>` ou `fix/<numéro>-<sujet>` (ex. `feat/8-tests-vitest-playwright`).
+3. **Commits** au format [Conventional Commits](https://www.conventionalcommits.org/) : `feat:`, `fix:`, `chore:`, `docs:`.
+4. **Tests à chaque PR** :
+   - Logique pure (calculs, transformations de données, parsing) → un test **Vitest** dans `src/**/*.test.ts`
+   - Changement d'enchaînement entre pages / parcours utilisateur → un test **Playwright** dans `tests/e2e/`, ou mise à jour d'un test existant
+   - Pas de couverture à 100 % exigée, mais pas de PR qui touche de la logique ou de la navigation sans test correspondant
+5. **Pull Request systématique** vers `main`, même seul — jamais de push direct (branche protégée).
+6. **CI verte obligatoire** avant de merger : lint + tests unitaires + build (`lint-and-build`) et tests e2e (`e2e-tests`).
+7. **Merger en squash**, supprimer la branche après merge.
 
 ## Conventions
 

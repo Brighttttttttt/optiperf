@@ -1,10 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { athletes, messages as messagesInitiaux, type Message } from "@/lib/mock";
 
-export default function Messagerie() {
-  const [athleteId, setAthleteId] = useState("lea");
+function MessagerieContenu() {
+  const searchParams = useSearchParams();
+  const demande = searchParams.get("athlete");
+  const initial = athletes.some((a) => a.id === demande) ? (demande as string) : "lea";
+  const [athleteId, setAthleteId] = useState(initial);
   const [messages, setMessages] = useState<Message[]>(messagesInitiaux);
   const [texte, setTexte] = useState("");
   const conv = messages.filter((m) => m.athleteId === athleteId);
@@ -31,7 +35,7 @@ export default function Messagerie() {
         ))}
       </div>
       <div className="flex-1 flex flex-col">
-        <div className="px-5 py-4 border-b border-bordure2 text-[15px] font-semibold">
+        <div data-testid="conversation-titre" className="px-5 py-4 border-b border-bordure2 text-[15px] font-semibold">
           {athletes.find((a) => a.id === athleteId)?.nom}
         </div>
         <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-3">
@@ -55,5 +59,13 @@ export default function Messagerie() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Messagerie() {
+  return (
+    <Suspense fallback={null}>
+      <MessagerieContenu />
+    </Suspense>
   );
 }

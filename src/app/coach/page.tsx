@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { athletes, messages, derniereActivite } from "@/lib/mock";
+import { athletes, messages, activites } from "@/lib/mock";
 
 const etatStyle: Record<string, string> = {
   "DANS LE PLAN": "text-vert bg-vertpale border-[#C8E2D3]",
@@ -10,6 +10,7 @@ const etatStyle: Record<string, string> = {
 
 export default function Dashboard() {
   const nonLus = messages.filter((m) => !m.lu);
+  const derniereActivite = activites[0];
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-end gap-4">
@@ -54,7 +55,7 @@ export default function Dashboard() {
               <span>{derniereActivite.fcMoy} bpm</span>
               <span className="text-gris">RPE {derniereActivite.rpe}</span>
             </div>
-            <Link href="/coach/analyse" className="text-xs font-semibold text-white bg-encre rounded-lg px-3 py-2">
+            <Link href={`/coach/analyse/${derniereActivite.id}`} className="text-xs font-semibold text-white bg-encre rounded-lg px-3 py-2">
               Analyser
             </Link>
           </div>
@@ -68,7 +69,7 @@ export default function Dashboard() {
           {nonLus.map((m) => {
             const a = athletes.find((x) => x.id === m.athleteId);
             return (
-              <Link key={m.id} href="/coach/messagerie" className="flex gap-3 px-4 py-3 border-b border-bordure2 last:border-0 hover:bg-sable">
+              <Link key={m.id} href={`/coach/messagerie?athlete=${m.athleteId}`} className="flex gap-3 px-4 py-3 border-b border-bordure2 last:border-0 hover:bg-sable">
                 <div className="w-7 h-7 rounded-full bg-bordure flex-none" />
                 <div className="min-w-0">
                   <div className="flex items-baseline gap-2">

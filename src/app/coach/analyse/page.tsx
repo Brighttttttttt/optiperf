@@ -1,55 +1,45 @@
-import { derniereActivite as act } from "@/lib/mock";
+import Link from "next/link";
+import { activites, athletes } from "@/lib/mock";
 
-function BarresZones({ data, titre }: { data: { zone: string; pct: number }[]; titre: string }) {
-  const couleurs = ["#7FA8FF", "#8FD3AE", "#E8C468", "#E9866F", "#D94F32"];
-  return (
-    <div className="bg-[#232120] border border-[#332F2C] rounded-xl p-4">
-      <div className="text-sm font-semibold text-[#F5F2ED] mb-3">{titre}</div>
-      <div className="flex flex-col gap-2">
-        {data.map((z, i) => (
-          <div key={z.zone} className="flex items-center gap-3">
-            <div className="font-mono text-xs text-[#9A938B] w-6">{z.zone}</div>
-            <div className="flex-1 h-3 bg-[#1A1917] rounded">
-              <div className="h-full rounded" style={{ width: `${z.pct}%`, background: couleurs[i] }} />
-            </div>
-            <div className="font-mono text-xs text-[#F5F2ED] w-10 text-right">{z.pct} %</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+export default function AnalysesListe({ searchParams }: { searchParams: { athlete?: string } }) {
+  const athlete = searchParams.athlete ? athletes.find((a) => a.id === searchParams.athlete) : undefined;
+  const liste = athlete ? activites.filter((a) => a.athleteId === athlete.id) : activites;
 
-export default function Analyse() {
   return (
-    <div className="bg-encre -m-6 min-h-screen p-6 flex flex-col gap-5">
-      <div>
-        <div className="font-mono text-[11px] tracking-widest uppercase text-[#9A938B]">Léa Marchand · {act.date}</div>
-        <div className="flex items-center gap-3 mt-1">
-          <h1 className="text-2xl font-semibold text-[#F5F2ED] tracking-tight">{act.titre}</h1>
-          <span className="font-mono text-[10px] text-[#8FD3AE] bg-[#2E6B4F]/20 border border-[#8FD3AE]/30 rounded-full px-2.5 py-1">SÉANCE VALIDÉE</span>
-        </div>
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-3">
+        <h1 className="text-2xl font-semibold tracking-tight">Analyses{athlete ? ` — ${athlete.nom}` : ""}</h1>
+        {athlete && (
+          <Link href="/coach/analyse" className="font-mono text-[11px] text-gris underline">
+            Voir toutes les analyses
+          </Link>
+        )}
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-2.5">
-        {[
-          ["Distance", act.distance],
-          ["Durée", act.duree],
-          ["Allure moy.", act.allure],
-          ["FC moyenne", `${act.fcMoy} bpm`],
-          ["D+", act.dPlus],
-          ["RPE ressenti", `${act.rpe}/10`]
-        ].map(([l, v]) => (
-          <div key={l} className="bg-[#232120] border border-[#332F2C] rounded-xl p-3.5">
-            <div className="font-mono text-[10px] tracking-widest uppercase text-[#8F8880]">{l}</div>
-            <div className="font-mono text-xl text-[#F5F2ED] mt-1">{v}</div>
-          </div>
-        ))}
+      <div className="bg-carte border border-bordure rounded-xl overflow-hidden">
+        {liste.map((act) => {
+          const a = athletes.find((x) => x.id === act.athleteId);
+          return (
+            <Link
+              key={act.id}
+              href={`/coach/analyse/${act.id}`}
+              className="flex items-center gap-3.5 px-4 py-3 border-b border-bordure2 last:border-0 hover:bg-sable"
+            >
+              <div className="w-8 h-8 rounded-full bg-bordure flex-none" />
+              <div className="w-40">
+                <div className="text-sm font-semibold">{a?.nom}</div>
+                <div className="font-mono text-[10px] text-gris2">{act.date}</div>
+              </div>
+              <div className="text-[13px] flex-1">{act.titre}</div>
+              <div className="flex gap-4 font-mono text-xs text-gris">
+                <span>{act.distance}</span>
+                <span>{act.duree}</span>
+                <span>RPE {act.rpe}</span>
+              </div>
+            </Link>
+          );
+        })}
+        {liste.length === 0 && <div className="px-4 py-6 text-sm text-gris2">Aucune séance analysée pour l&apos;instant.</div>}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <BarresZones data={act.zones} titre="Zones FC — cette séance" />
-        <BarresZones data={act.zonesMoyennes10} titre="Zones FC — moyenne des 10 dernières séances" />
-      </div>
-      <p className="font-mono text-[11px] text-[#8F8880]">Les courbes FC/allure/altitude issues du fichier .FIT arrivent en Phase 3 (parsing des fichiers).</p>
     </div>
   );
 }

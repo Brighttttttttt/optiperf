@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const onglets = [
   { href: "/athlete", label: "Ma semaine" },
   { href: "/athlete/upload", label: "Déposer" },
+  { href: "/athlete/historique", label: "Historique" },
   { href: "/athlete/messagerie", label: "Messages" }
 ];
 

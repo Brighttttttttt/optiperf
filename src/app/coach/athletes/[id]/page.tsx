@@ -1,16 +1,11 @@
 import { athletes } from "@/lib/mock";
+import { zonesFc } from "@/lib/zones";
 import { notFound } from "next/navigation";
 
 export default function FicheAthlete({ params }: { params: { id: string } }) {
   const a = athletes.find((x) => x.id === params.id);
   if (!a) notFound();
-  const zones = [
-    ["Z1", "50–60 %", Math.round(a.fcMax * 0.5), Math.round(a.fcMax * 0.6)],
-    ["Z2", "60–70 %", Math.round(a.fcMax * 0.6), Math.round(a.fcMax * 0.7)],
-    ["Z3", "70–80 %", Math.round(a.fcMax * 0.7), Math.round(a.fcMax * 0.8)],
-    ["Z4", "80–90 %", Math.round(a.fcMax * 0.8), Math.round(a.fcMax * 0.9)],
-    ["Z5", "90–100 %", Math.round(a.fcMax * 0.9), a.fcMax]
-  ] as const;
+  const zones = zonesFc(a.fcMax);
   return (
     <div className="flex flex-col gap-5 max-w-3xl">
       <div className="flex items-center gap-4">
@@ -35,9 +30,9 @@ export default function FicheAthlete({ params }: { params: { id: string } }) {
       <div className="bg-carte border border-bordure rounded-xl p-5">
         <div className="text-[15px] font-semibold mb-3">Zones FC (auto · 5 zones · FC max {a.fcMax} bpm)</div>
         <div className="flex flex-col gap-2">
-          {zones.map(([z, pct, lo, hi]) => (
-            <div key={z} className="flex items-center gap-3">
-              <div className="font-mono text-xs w-7">{z}</div>
+          {zones.map(({ zone, pct, lo, hi }) => (
+            <div key={zone} className="flex items-center gap-3">
+              <div className="font-mono text-xs w-7">{zone}</div>
               <div className="font-mono text-[11px] text-gris w-20">{pct}</div>
               <div className="font-mono text-[13px]">{lo}–{hi} bpm</div>
             </div>

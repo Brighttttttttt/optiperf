@@ -35,6 +35,22 @@ export interface Message {
   lu: boolean;
 }
 
+export interface Activite {
+  id: string;
+  seanceId?: string;
+  athleteId: string;
+  titre: string;
+  date: string;
+  distance: string;
+  duree: string;
+  allure: string;
+  fcMoy: number;
+  dPlus: string;
+  rpe: number;
+  zones: { zone: string; pct: number }[];
+  zonesMoyennes10: { zone: string; pct: number }[];
+}
+
 export const athletes: Athlete[] = [
   { id: "lea", nom: "Léa Marchand", ville: "Lyon", objectif: "Marathon Berlin", echeance: "J-58 · sub 3:00", volumeSemaine: "38 / 62 km", adhesion: 92, rpeMoyen: 7.1, etat: "DANS LE PLAN", fcMax: 192 },
   { id: "sofia", nom: "Sofia Ruiz", ville: "Grenoble", objectif: "Trail 42 km", echeance: "J-91", volumeSemaine: "31 / 58 km", adhesion: 64, rpeMoyen: 8.6, etat: "FATIGUE", fcMax: 188 },
@@ -63,29 +79,55 @@ export const messages: Message[] = [
   { id: "m4", de: "coach", athleteId: "lea", texte: "Bien vu pour le vent — les allures des 3 premiers étaient parfaites. Récup complète demain.", quand: "09 h 32", lu: true }
 ];
 
-export const derniereActivite = {
-  athleteId: "lea",
-  titre: "Seuil 4×2000 m",
-  date: "sam. 18 juil. · 07 h 42",
-  distance: "14,8 km",
-  duree: "1:08:24",
-  allure: "4:37/km",
-  fcMoy: 158,
-  fcMax: 179,
-  dPlus: "186 m",
-  rpe: 7,
-  zones: [
-    { zone: "Z1", pct: 18 },
-    { zone: "Z2", pct: 24 },
-    { zone: "Z3", pct: 20 },
-    { zone: "Z4", pct: 30 },
-    { zone: "Z5", pct: 8 }
-  ],
-  zonesMoyennes10: [
-    { zone: "Z1", pct: 22 },
-    { zone: "Z2", pct: 34 },
-    { zone: "Z3", pct: 18 },
-    { zone: "Z4", pct: 20 },
-    { zone: "Z5", pct: 6 }
-  ]
-};
+const zonesMoyennes10Lea = [
+  { zone: "Z1", pct: 22 },
+  { zone: "Z2", pct: 34 },
+  { zone: "Z3", pct: 18 },
+  { zone: "Z4", pct: 20 },
+  { zone: "Z5", pct: 6 }
+];
+
+// La plus récente en premier — c'est celle affichée sur le dashboard coach.
+export const activites: Activite[] = [
+  {
+    id: "act1",
+    seanceId: "s1",
+    athleteId: "lea",
+    titre: "10×400 m",
+    date: "lun. 21 juil. · 07 h 30",
+    distance: "10,4 km",
+    duree: "50:00",
+    allure: "4:48/km",
+    fcMoy: 165,
+    dPlus: "42 m",
+    rpe: 8,
+    zones: [
+      { zone: "Z1", pct: 10 },
+      { zone: "Z2", pct: 15 },
+      { zone: "Z3", pct: 20 },
+      { zone: "Z4", pct: 35 },
+      { zone: "Z5", pct: 20 }
+    ],
+    zonesMoyennes10: zonesMoyennes10Lea
+  },
+  {
+    id: "act0",
+    athleteId: "lea",
+    titre: "Seuil 4×2000 m",
+    date: "sam. 18 juil. · 07 h 42",
+    distance: "14,8 km",
+    duree: "1:08:24",
+    allure: "4:37/km",
+    fcMoy: 158,
+    dPlus: "186 m",
+    rpe: 7,
+    zones: [
+      { zone: "Z1", pct: 18 },
+      { zone: "Z2", pct: 24 },
+      { zone: "Z3", pct: 20 },
+      { zone: "Z4", pct: 30 },
+      { zone: "Z5", pct: 8 }
+    ],
+    zonesMoyennes10: zonesMoyennes10Lea
+  }
+];

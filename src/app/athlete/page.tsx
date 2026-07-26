@@ -23,7 +23,7 @@ export default function MaSemaine() {
             <div className="text-[15px] font-semibold mt-1.5">{s.titre}</div>
             <div className="font-mono text-xs text-gris mt-0.5">{s.detail}</div>
             {s.statut === "prevu" && (
-              <Link href="/athlete/upload" className="inline-block mt-3 text-[13px] font-semibold text-white bg-corail rounded-lg px-3.5 py-2">
+              <Link href={`/athlete/upload?seance=${s.id}`} className="inline-block mt-3 text-[13px] font-semibold text-white bg-corail rounded-lg px-3.5 py-2">
                 Déposer ma séance
               </Link>
             )}

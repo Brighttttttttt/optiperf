@@ -7,7 +7,3 @@ export function activiteDeLaSeance(seanceId: string): Activite | undefined {
 export function activitesDeLAthlete(athleteId: string): Activite[] {
   return activites.filter((a) => a.athleteId === athleteId);
 }
-
-export function derniereActivite(): Activite | undefined {
-  return activites[0];
-}

@@ -47,6 +47,7 @@ export interface Activite {
   fcMoy: number;
   dPlus: string;
   rpe: number;
+  vue: boolean;
   zones: { zone: string; pct: number }[];
   zonesMoyennes10: { zone: string; pct: number }[];
 }
@@ -101,6 +102,7 @@ export const activites: Activite[] = [
     fcMoy: 165,
     dPlus: "42 m",
     rpe: 8,
+    vue: false,
     zones: [
       { zone: "Z1", pct: 10 },
       { zone: "Z2", pct: 15 },
@@ -121,6 +123,7 @@ export const activites: Activite[] = [
     fcMoy: 158,
     dPlus: "186 m",
     rpe: 7,
+    vue: true,
     zones: [
       { zone: "Z1", pct: 18 },
       { zone: "Z2", pct: 24 },

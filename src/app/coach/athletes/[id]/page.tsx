@@ -1,32 +1,19 @@
 import Link from "next/link";
-import { athletes } from "@/lib/mock";
+import { athletes, seances } from "@/lib/mock";
 import { zonesFc } from "@/lib/zones";
-import { notFound } from "next/navigation";
 
 export default function FicheAthlete({ params }: { params: { id: string } }) {
-  const a = athletes.find((x) => x.id === params.id);
-  if (!a) notFound();
+  const a = athletes.find((x) => x.id === params.id)!;
   const zones = zonesFc(a.fcMax);
+  const dernieresSeances = seances
+    .filter((s) => s.athleteId === a.id && s.statut !== "prevu")
+    .slice()
+    .sort((s1, s2) => (s1.jour < s2.jour ? 1 : -1))
+    .slice(0, 3);
+
   return (
     <div className="flex flex-col gap-5 max-w-3xl">
-      <Link href="/coach" className="font-mono text-[11px] text-gris hover:text-encre w-fit">
-        ← Retour au tableau de bord
-      </Link>
-      <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-full bg-bordure" />
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">{a.nom}</h1>
-          <div className="font-mono text-[11px] text-gris">{a.ville} · {a.objectif} · {a.echeance}</div>
-        </div>
-        <div className="ml-auto flex gap-2.5">
-          <Link href={`/coach/planning?athlete=${a.id}`} className="text-xs font-semibold text-white bg-encre rounded-lg px-3.5 py-2">
-            Voir le planning
-          </Link>
-          <Link href={`/coach/analyse?athlete=${a.id}`} className="text-xs font-semibold border border-bordure rounded-lg px-3.5 py-2">
-            Séances analysées
-          </Link>
-        </div>
-      </div>
+      <div className="font-mono text-[11px] text-gris">{a.ville} · {a.objectif} · {a.echeance}</div>
       <div className="grid grid-cols-3 gap-3">
         {[
           ["Volume semaine", a.volumeSemaine],
@@ -50,6 +37,23 @@ export default function FicheAthlete({ params }: { params: { id: string } }) {
             </div>
           ))}
         </div>
+      </div>
+      <div className="bg-carte border border-bordure rounded-xl overflow-hidden">
+        <div className="px-4 py-3.5 border-b border-bordure2 flex items-center justify-between">
+          <div className="text-[15px] font-semibold">Dernières séances</div>
+          <Link href={`/coach/athletes/${a.id}/planning`} className="font-mono text-[11px] text-gris underline">
+            Voir le planning
+          </Link>
+        </div>
+        {dernieresSeances.map((s) => (
+          <div key={s.id} className="flex items-center gap-3.5 px-4 py-3 border-b border-bordure2 last:border-0">
+            <div className="w-28 font-mono text-[10px] text-gris2">{s.jour}</div>
+            <div className="flex-1 text-[13px]">{s.titre}</div>
+            {s.statut === "fait" && <span className="font-mono text-[11px] text-vert">Fait{s.rpe ? ` · RPE ${s.rpe}` : ""}</span>}
+            {s.statut === "manque" && <span className="font-mono text-[11px] text-corailfonce">Manqué</span>}
+          </div>
+        ))}
+        {dernieresSeances.length === 0 && <div className="px-4 py-6 text-sm text-gris2">Aucune séance réalisée pour l&apos;instant.</div>}
       </div>
       <p className="font-mono text-[11px] text-gris2">Records, notes du coach et historique complet arrivent avec la base de données (Phase 1b).</p>
     </div>

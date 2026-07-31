@@ -33,7 +33,7 @@ export default function PanneauSeance({ activite, fermerHref }: { activite: Acti
   }, [activite.id, marquerVu]);
 
   return (
-    <div className="fixed inset-0 z-20 flex justify-end">
+    <div className="fixed inset-0 z-30 flex justify-end">
       <Link href={fermerHref} className="absolute inset-0 bg-black/40" aria-label="Fermer" />
       <div className="relative w-full max-w-lg bg-encre h-full overflow-y-auto p-6 flex flex-col gap-5 shadow-2xl">
         <Link href={fermerHref} className="font-mono text-[11px] text-[#9A938B] hover:text-[#F5F2ED] w-fit">

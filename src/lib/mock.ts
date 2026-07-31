@@ -31,7 +31,8 @@ export interface Message {
   de: "coach" | "athlete";
   athleteId: string;
   texte: string;
-  quand: string;
+  quand: string; // libellé affiché ("09 h 14", "hier"…)
+  horodatage: string; // ISO, sert uniquement à trier les conversations
   lu: boolean;
 }
 
@@ -74,10 +75,10 @@ export const seances: Seance[] = [
 ];
 
 export const messages: Message[] = [
-  { id: "m1", de: "athlete", athleteId: "lea", texte: "Le dernier 2000 a été très dur, je pense que le vent m'a coûté cher sur le retour.", quand: "09 h 14", lu: false },
-  { id: "m2", de: "athlete", athleteId: "sofia", texte: "Je suis en déplacement jeudi et vendredi, on peut décaler ?", quand: "hier", lu: false },
-  { id: "m3", de: "athlete", athleteId: "tom", texte: "Petite gêne au mollet droit depuis la séance de VMA.", quand: "hier", lu: false },
-  { id: "m4", de: "coach", athleteId: "lea", texte: "Bien vu pour le vent — les allures des 3 premiers étaient parfaites. Récup complète demain.", quand: "09 h 32", lu: true }
+  { id: "m1", de: "athlete", athleteId: "lea", texte: "Le dernier 2000 a été très dur, je pense que le vent m'a coûté cher sur le retour.", quand: "09 h 14", horodatage: "2026-07-25T09:14", lu: false },
+  { id: "m2", de: "athlete", athleteId: "sofia", texte: "Je suis en déplacement jeudi et vendredi, on peut décaler ?", quand: "hier", horodatage: "2026-07-24T18:05", lu: false },
+  { id: "m3", de: "athlete", athleteId: "tom", texte: "Petite gêne au mollet droit depuis la séance de VMA.", quand: "hier", horodatage: "2026-07-24T20:40", lu: false },
+  { id: "m4", de: "coach", athleteId: "lea", texte: "Bien vu pour le vent — les allures des 3 premiers étaient parfaites. Récup complète demain.", quand: "09 h 32", horodatage: "2026-07-25T09:32", lu: true }
 ];
 
 const zonesMoyennes10Lea = [

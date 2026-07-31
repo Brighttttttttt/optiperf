@@ -9,7 +9,18 @@ export default function MessagerieAthlete() {
 
   function envoyer() {
     if (!texte.trim()) return;
-    setMessages([...messages, { id: String(Date.now()), de: "athlete", athleteId: "lea", texte: texte.trim(), quand: "à l'instant", lu: true }]);
+    setMessages([
+      ...messages,
+      {
+        id: String(Date.now()),
+        de: "athlete",
+        athleteId: "lea",
+        texte: texte.trim(),
+        quand: "à l'instant",
+        horodatage: new Date().toISOString(),
+        lu: true
+      }
+    ]);
     setTexte("");
   }
 

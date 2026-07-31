@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { athletes } from "@/lib/mock";
+import { IconeCalendrier, IconeFiche, IconeHistorique, IconeMessage } from "@/components/Icones";
 
 const onglets = [
-  { segment: "", label: "Fiche & dashboard" },
-  { segment: "planning", label: "Planning" },
-  { segment: "messagerie", label: "Messagerie" }
+  { segment: "", label: "Fiche", Icone: IconeFiche },
+  { segment: "planning", label: "Planning", Icone: IconeCalendrier },
+  { segment: "historique", label: "Historique", Icone: IconeHistorique },
+  { segment: "messagerie", label: "Messagerie", Icone: IconeMessage }
 ];
 
 export default function AthleteNav({ athleteId, athleteNom }: { athleteId: string; athleteNom: string }) {
@@ -18,36 +20,51 @@ export default function AthleteNav({ athleteId, athleteNom }: { athleteId: strin
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <Link href="/coach" className="font-mono text-[11px] text-gris hover:text-encre w-fit">
-          ← Retour au tableau de bord
-        </Link>
-        <div className="flex items-center gap-1.5">
-          {athletes.map((a) => (
+      <Link href="/coach" className="font-mono text-[11px] text-gris hover:text-encre w-fit">
+        ← Retour au tableau de bord
+      </Link>
+
+      {/* Passer d'un athlète à l'autre sans repasser par le tableau de bord,
+          en restant sur le même onglet. */}
+      <div className="flex gap-1.5 overflow-x-auto pb-1 -mb-1">
+        {athletes.map((a) => {
+          const actif = a.id === athleteId;
+          return (
             <Link
               key={a.id}
               href={`/coach/athletes/${a.id}${suffixe}`}
-              title={a.nom}
-              className={`w-7 h-7 rounded-full flex-none bg-bordure border-2 ${a.id === athleteId ? "border-corail" : "border-transparent hover:border-gris2"}`}
-            />
-          ))}
-        </div>
+              aria-current={actif ? "page" : undefined}
+              className={`flex items-center gap-2 rounded-full border pl-1 pr-3 py-1 flex-none transition-colors ${
+                actif ? "border-corail bg-corailpale text-encre" : "border-bordure bg-carte text-gris hover:border-gris2 hover:text-encre"
+              }`}
+            >
+              <span className="w-6 h-6 rounded-full bg-bordure flex-none" />
+              <span className="text-xs font-medium whitespace-nowrap">{a.nom}</span>
+            </Link>
+          );
+        })}
       </div>
-      <div className="flex items-center gap-4">
+
+      <div className="flex items-center gap-3.5">
         <div className="w-11 h-11 rounded-full bg-bordure flex-none" />
         <h1 className="text-xl font-semibold tracking-tight">{athleteNom}</h1>
       </div>
-      <nav className="flex gap-1 border-b border-bordure2">
-        {onglets.map((o) => {
-          const href = `${base}${o.segment ? `/${o.segment}` : ""}`;
-          const actif = segmentActif === o.segment;
+
+      <nav className="flex gap-1 border-b border-bordure2 overflow-x-auto">
+        {onglets.map(({ segment, label, Icone }) => {
+          const href = `${base}${segment ? `/${segment}` : ""}`;
+          const actif = segmentActif === segment;
           return (
             <Link
-              key={o.segment}
+              key={segment}
               href={href}
-              className={`px-3.5 py-2.5 text-sm font-medium border-b-2 -mb-px ${actif ? "border-corail text-encre" : "border-transparent text-gris hover:text-encre"}`}
+              aria-current={actif ? "page" : undefined}
+              className={`flex items-center gap-2 px-3 sm:px-3.5 py-2.5 text-sm font-medium border-b-2 -mb-px whitespace-nowrap ${
+                actif ? "border-corail text-encre" : "border-transparent text-gris hover:text-encre"
+              }`}
             >
-              {o.label}
+              <Icone />
+              {label}
             </Link>
           );
         })}

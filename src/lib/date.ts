@@ -54,6 +54,11 @@ export function estDansLeMois(dateISO: string, moisDeReference: string): boolean
   return d.getFullYear() === ref.getFullYear() && d.getMonth() === ref.getMonth();
 }
 
+// "2026-07-21" → "mar. 21 juil."
+export function jourCourt(dateISO: string): string {
+  return parseISO(dateISO).toLocaleDateString("fr-FR", { weekday: "short", day: "2-digit", month: "short" });
+}
+
 export function nomMois(dateISO: string): string {
   const texte = parseISO(dateISO).toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
   return texte.charAt(0).toUpperCase() + texte.slice(1);

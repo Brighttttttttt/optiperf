@@ -16,16 +16,18 @@ export default function Planning({ params, searchParams }: { params: { id: strin
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <h2 className="text-xl font-semibold tracking-tight">{nomMois(AUJOURDHUI)}</h2>
-        <div className="flex items-center gap-3 ml-2">
+        <div className="flex items-center gap-3">
           <span className="flex items-center gap-1.5 text-xs text-gris"><span className="w-2 h-2 rounded-sm bg-corail" /> Running</span>
           <span className="flex items-center gap-1.5 text-xs text-gris"><span className="w-2 h-2 rounded-sm bg-indigo2" /> Musculation</span>
         </div>
         <button className="ml-auto text-sm font-semibold text-white bg-encre rounded-lg px-3.5 py-2.5">+ Nouvelle séance</button>
       </div>
 
-      <div className="grid grid-cols-7 gap-2">
+      {/* Sur petit écran, le mois défile horizontalement plutôt que d'écraser les cases. */}
+      <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+      <div className="grid grid-cols-7 gap-2 min-w-[700px]">
         {jours.map((j) => (
           <div key={j} className="font-mono text-[10px] tracking-widest uppercase text-gris2 pl-1">{j}</div>
         ))}
@@ -67,6 +69,7 @@ export default function Planning({ params, searchParams }: { params: { id: strin
             );
           })
         )}
+      </div>
       </div>
       <p className="font-mono text-[11px] text-gris2">Le drag &amp; drop et la création de séance arrivent en Phase 2.</p>
 

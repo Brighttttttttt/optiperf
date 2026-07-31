@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { estDansLeMois, grilleDuMois, lundiDeLaSemaine, semaineSuivante } from "./date";
+import { estDansLeMois, grilleDuMois, jourCourt, lundiDeLaSemaine, semaineSuivante } from "./date";
 
 describe("lundiDeLaSemaine", () => {
   it("retrouve le lundi de la semaine en cours (samedi 25 juillet 2026 → lundi 20 juillet)", () => {
@@ -32,6 +32,12 @@ describe("grilleDuMois", () => {
       expect(semaine).toHaveLength(7);
       expect(lundiDeLaSemaine(semaine[0])).toBe(semaine[0]);
     }
+  });
+});
+
+describe("jourCourt", () => {
+  it("écrit la date en français abrégé", () => {
+    expect(jourCourt("2026-07-21")).toBe("mar. 21 juil.");
   });
 });
 

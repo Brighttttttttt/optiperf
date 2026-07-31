@@ -6,7 +6,7 @@ export default function AthleteLayout({ children, params }: { children: React.Re
   const athlete = athletes.find((a) => a.id === params.id);
   if (!athlete) notFound();
   return (
-    <div className="max-w-4xl mx-auto flex flex-col gap-5">
+    <div className="flex flex-col gap-5">
       <AthleteNav athleteId={athlete.id} athleteNom={athlete.nom} />
       {children}
     </div>

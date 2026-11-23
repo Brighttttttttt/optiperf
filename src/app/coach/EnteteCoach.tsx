@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import BoutonDeconnexion from "@/components/BoutonDeconnexion";
 import { IconeCloche, IconeMessage } from "@/components/Icones";
 import { messagesNonLus } from "@/lib/messagerie";
 import { notificationsCoach } from "@/lib/notifications";
@@ -55,6 +56,7 @@ export default function EnteteCoach() {
             <IconeCloche className="w-[19px] h-[19px]" />
             <Pastille nombre={nbNotifications} />
           </Link>
+          <BoutonDeconnexion />
         </div>
       </div>
     </header>

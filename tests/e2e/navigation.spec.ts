@@ -4,21 +4,33 @@ function ligne(page: Page, nom: string) {
   return page.getByTestId("ligne-athlete").filter({ hasText: nom });
 }
 
-test("parcours coach : login → dashboard → planning de l'athlète cliqué", async ({ page }) => {
-  await page.goto("/login");
-  await page.getByRole("link", { name: "Entrer comme coach" }).click();
-  await expect(page).toHaveURL(/\/coach$/);
+// L'authentification est désormais réelle (Supabase) : ces tests vérifient le
+// rendu du formulaire sans appel réseau. Le cycle inscription/connexion complet
+// se teste manuellement (aucun projet Supabase de test n'est branché en CI).
+test.describe("page de connexion", () => {
+  test("propose se connecter et créer un compte, avec les bons champs par mode", async ({ page }) => {
+    await page.goto("/login");
+    await expect(page.locator("form").getByRole("button", { name: "Se connecter" })).toBeVisible();
+    await expect(page.getByPlaceholder("E-mail")).toBeVisible();
+    await expect(page.getByPlaceholder("Mot de passe")).toBeVisible();
+    await expect(page.getByPlaceholder("Nom complet")).toHaveCount(0);
 
-  await ligne(page, "Léa Marchand").getByRole("link", { name: "Ouvrir le planning de Léa Marchand" }).click();
-  await expect(page).toHaveURL(/\/coach\/athletes\/lea\/planning$/);
-  await expect(page.getByRole("heading", { name: "Léa Marchand" })).toBeVisible();
+    await page.getByRole("button", { name: "Créer un compte" }).click();
+    await expect(page.getByPlaceholder("Nom complet")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Coach" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Athlète" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Créer mon compte" })).toBeVisible();
+  });
+
+  test("bloque la soumission tant que l'e-mail et le mot de passe ne sont pas remplis", async ({ page }) => {
+    await page.goto("/login");
+    await page.getByRole("button", { name: "Se connecter", exact: true }).last().click();
+    await expect(page).toHaveURL(/\/login$/);
+  });
 });
 
-test("parcours athlète : login → ma semaine → messagerie", async ({ page }) => {
-  await page.goto("/login");
-  await page.getByRole("link", { name: "Entrer comme athlète" }).click();
-  await expect(page).toHaveURL(/\/athlete$/);
-
+test("athlète : la messagerie est accessible depuis Ma semaine", async ({ page }) => {
+  await page.goto("/athlete");
   await page.getByRole("link", { name: "Messages" }).click();
   await expect(page).toHaveURL(/\/athlete\/messagerie$/);
 });
